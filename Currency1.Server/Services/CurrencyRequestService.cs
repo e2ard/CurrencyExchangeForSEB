@@ -1,7 +1,6 @@
 ﻿using Currency1.Server.Models;
 using CurrencyStore;
 using Newtonsoft.Json;
-using System.Net.Http;
 
 namespace Currency1.Server.Services
 {

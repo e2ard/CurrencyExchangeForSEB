@@ -41,7 +41,7 @@ namespace Currency1.Server.Controllers
             }
             catch (Exception ex)
             {
-                return new Response<decimal?>(null, ["No result found"]);//TO Fix: get error from api
+                return new Response<decimal?>(null, ["No result found"]);//TO Fix: get error from api, log exception
             }
             
         }

@@ -8,11 +8,12 @@ namespace CurrencyConverterTests
 {
     public class MiscTests
     {
+        ICurrencyService service = new CurrencyRequestService();
         [Fact]
         public async void GetResponseTest()
         {
             var url = "https://data-api.ecb.europa.eu/service/data/EXR/M..EUR.SP00.A?updatedAfter=2024-02-28T14%3A15%3A00%2B01%3A00&detail=dataonly&format=jsondata"; // ECB API URL
-            var Response = @"{
+            var FakeResponse = @"{
     'header': {
         'id': '1832b7ed-e9c1-4f7a-95aa-0c4d147d097c',
         'test': false,
@@ -434,23 +435,25 @@ namespace CurrencyConverterTests
             ]
         }
 }
-}";
+}";//used to mockup request
 
-            var service = new CurrencyRequestService();
+            //var service = new CurrencyRequestService();
             var response = await service.GetRates(url);
             var currencyNames = response!.structure!.dimensions!.series![1].values.ToList();
-            var currencySeries = response!.dataSets![0].series!.Values.Select(s => s.observations!["0"].FirstOrDefault()).ToList();
+            var currencyExchangeRates = response!.dataSets![0].series!.Values.Select(s => s.observations!["0"].FirstOrDefault()).ToList();
 
-            Assert.NotNull(currencySeries);
+            Assert.NotNull(currencyExchangeRates);
             Assert.NotNull(currencyNames);
+            Assert.Equal(currencyExchangeRates.Count, currencyNames.Count);
         }
 
+        private const string webApiUrl = "http://localhost:5016/";
         [Fact]
         public async void GetCurrencies()
         {
             using (var httpClient = new HttpClient())
             {
-                var result = await httpClient.GetStringAsync("http://localhost:5016/currencies");
+                var result = await httpClient.GetStringAsync($"{webApiUrl}currencies");
                 var curencies = JsonConvert.DeserializeObject<List<StoredCurrency>>(result);
                 Assert.NotNull(curencies);
                 Assert.Equal(30, curencies.Count);
