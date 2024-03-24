@@ -1,0 +1,43 @@
+<h1 id="tableLabel">Currency exchanger</h1>
+
+<div class="box flex-container">
+  <div *ngIf="errors">
+    <div *ngFor="let x of errors" class="error">{{x}}</div>
+  </div>
+</div>
+
+<div class="box flex-container">
+
+  <div>
+    <label for="dropdown1">Historical rates: </label>
+    <input [(ngModel)]="date" class="form-control" />
+  </div>
+
+  <div>
+    <label for="dropdown1">Ammount: </label>
+    <input [(ngModel)]="amount" class="form-control" />
+    <div *ngIf="!amount && touched" class="error">Select amount</div>
+  </div>
+
+  <div>
+    <label for="">Exchange from: </label>
+    <select name="selectedFrom" [(ngModel)]="selectedFrom" class="form-control">
+      <option *ngFor="let x of exchangeFrom" [value]="x.name">{{x.name}}</option>
+    </select>
+    <div *ngIf="!selectedFrom && touched" class="error">Select currency to exchage from</div>
+  </div>
+
+  <div>
+    <label for="dropdown1">Exchange to: </label>
+    <select name="selectedTo" [(ngModel)]="selectedTo" class="form-control">
+      <option *ngFor="let x of exchangeTo" [value]="x.name">{{x.name}}</option>
+    </select>
+    <div *ngIf="!selectedTo && touched" class="error">Select currency to exchage to</div>
+  </div>
+</div>
+
+<div class="box flex-container">
+  <div>
+    <button (click)="calculateRate()" class="btn">Calculate</button><div>{{rate}}</div>
+  </div>
+</div>
