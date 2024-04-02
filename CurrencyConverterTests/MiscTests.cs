@@ -449,7 +449,7 @@ namespace CurrencyConverterTests
 
         private const string webApiUrl = "http://localhost:5016/";
         [Fact]
-        public async void GetCurrencies()
+        public async void GetCurrenciesTest()
         {
             using (var httpClient = new HttpClient())
             {
@@ -464,8 +464,8 @@ namespace CurrencyConverterTests
         [InlineData(3, 0, null, null)]
         [InlineData(2, 0, null, "EUR")]
         [InlineData(1, 0, "EUR", "EUR")]
-        [InlineData(0, 1, "EUR", "EUR")]
-        public void RatesModelValidation(int eurCount, decimal amount, string exchageFrom, string exchangeTo)
+        [InlineData(0, 1, "EUR", "EUR")]//TO fix: more specific tests to identify issues faster
+        public void RatesModelValidationTest(int eurCount, decimal amount, string exchageFrom, string exchangeTo)
         {
             var rates = new RatesModel() { Amount = amount, From = exchageFrom, To = exchangeTo };
             var errors = rates.Validate(new ValidationContext(rates, null, null));

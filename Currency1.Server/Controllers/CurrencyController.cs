@@ -10,17 +10,18 @@ namespace Currency1.Server.Controllers
     public class CurrencyController : ControllerBase
     {
         private readonly ILogger<CurrencyController> _logger;
+        ICurrencyService currencyService;
 
         public CurrencyController(ILogger<CurrencyController> logger)
         {
             _logger = logger;
+            currencyService = new CurrencyRequestService();
         }
 
         [HttpGet(Name = "GetCurrency")]
         public async Task<IEnumerable<Currency>> Get()
         {
-            var service = new CurrencyRequestService();
-            var response = await service.GetExchangeRates();
+            var response = await currencyService.GetExchangeRates();
 
             return response!;
         }
@@ -34,13 +35,13 @@ namespace Currency1.Server.Controllers
                 if (errors.Any())
                     return new Response<decimal?>(null, ["Model is invalid"]);//TO DO: make errors more specific
 
-                var service = new CurrencyRequestService();
-                var getRateResult = await service.GetRate(model.Amount, model.From, model.To, model.Date);//TO DO: retun
+                var getRateResult = await currencyService.GetRate(model.Amount, model.From, model.To, model.Date);//TO DO: retun
 
                 return new Response<decimal?>(getRateResult);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return new Response<decimal?>(null, ["No result found"]);//TO Fix: get error from api, log exception
             }
             

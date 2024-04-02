@@ -46,7 +46,7 @@ namespace Currency1.Server.Services
             string apiUrl = $"https://data-api.ecb.europa.eu/service/data/EXR/M.{to}.{from}.SP00.A?updatedAfter={date}&detail=dataonly&format=jsondata"; // ECB API URL
 
             var response = await GetRates(apiUrl);
-            var currencySeries = response.dataSets[0].series.Values.Select(s => s.observations["0"].FirstOrDefault()).ToList();// TO DO: add parsing checks
+            var currencySeries = response!.dataSets![0].series!.Values.Select(s => s.observations!["0"].FirstOrDefault()).ToList();// TO DO: add parsing checks
 
             return currencySeries[0] * amount;
         }
